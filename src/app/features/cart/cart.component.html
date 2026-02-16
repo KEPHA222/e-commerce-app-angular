@@ -1,0 +1,80 @@
+<div class="min-h-screen bg-gray-100 p-8">
+  <!-- Page Title -->
+  <h2 class="text-3xl font-bold mb-6 text-gray-800">Selected Products</h2>
+
+  <!-- Cart Table Card -->
+  <div class="bg-white shadow-lg rounded-xl overflow-hidden">
+    <table class="w-full text-left border-collapse">
+      <thead class="bg-gray-50 border-b">
+        <tr>
+          <th class="p-4 text-sm font-semibold text-gray-600">Product</th>
+          <th class="p-4 text-sm font-semibold text-gray-600">Qty</th>
+          <th class="p-4 text-sm font-semibold text-gray-600">Price</th>
+          <th class="p-4 text-sm font-semibold text-gray-600">Subtotal</th>
+          <th class="p-4 text-sm font-semibold text-gray-600">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr
+          *ngFor="let item of cartService.cart$ | async"
+          class="border-b hover:bg-gray-50 transition"
+        >
+          <td class="p-4 font-medium text-gray-800">
+            {{ item.title }}
+          </td>
+
+          <td class="p-4 text-gray-600">
+            {{ item.quantity }}
+          </td>
+
+          <td class="p-4 text-gray-600">${{ item.price }}</td>
+
+          <td class="p-4 font-semibold text-gray-800">${{ item.price * item.quantity }}</td>
+
+          <td class="p-4">
+            <button
+              class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
+              (click)="cartService.decrease(item.id)"
+            >
+              -
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Summary Section -->
+  <div class="mt-8 bg-white shadow-md rounded-xl p-6 w-full max-w-md">
+    <div class="flex justify-between mb-2 text-gray-700">
+      <span>Total:</span>
+      <span class="font-semibold">${{ cartService.getTotal() }}</span>
+    </div>
+
+    <div class="flex justify-between mb-2 text-gray-700">
+      <span>Wallet:</span>
+      <span class="font-semibold">${{ cartService.getWalletBalance() }}</span>
+    </div>
+
+    <div class="flex justify-between mb-4 text-lg">
+      <span class="font-bold">Remaining:</span>
+      <span
+        class="font-bold"
+        [ngClass]="{
+          'text-green-600': cartService.getRemainingBalance() >= 0,
+          'text-red-600': cartService.getRemainingBalance() < 0,
+        }"
+      >
+        ${{ cartService.getRemainingBalance() }}
+      </span>
+    </div>
+
+    <button
+      class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition disabled:opacity-50"
+      (click)="pay()"
+    >
+      Pay
+    </button>
+  </div>
+</div>
