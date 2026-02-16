@@ -64,6 +64,21 @@ export class CartService {
     this.saveToStorage(cart);
   }
 
+  updateQuantity(productId: number, quantity: number) {
+    let cart = [...this.getCart()];
+    const index = cart.findIndex((p) => p.id === productId);
+
+    if (index > -1) {
+      if (quantity <= 0) {
+        cart.splice(index, 1);
+      } else {
+        cart[index] = { ...cart[index], quantity };
+      }
+      this.cartSubject.next(cart);
+      this.saveToStorage(cart);
+    }
+  }
+
   getTotal(): number {
     return this.getCart().reduce((acc, item) => acc + item.price * item.quantity, 0);
   }

@@ -25,20 +25,31 @@
           </td>
 
           <td class="p-4 text-gray-600">
-            {{ item.quantity }}
+            <input
+              type="number"
+              min="0"
+              [value]="item.quantity"
+              (change)="onQuantityChange(item.id, $event)"
+              class="w-16 border rounded px-2 py-1 text-center focus:ring-2 focus:ring-blue-400 outline-none"
+              (keypress)="onlyNumbers($event)"
+            />
           </td>
 
-          <td class="p-4 text-gray-600">${{ item.price }}</td>
+          <td class="p-4 text-gray-600">KES {{ item.price | number: '1.2-2' }}</td>
 
-          <td class="p-4 font-semibold text-gray-800">${{ item.price * item.quantity }}</td>
+          <td class="p-4 font-semibold text-gray-800">
+            KES {{ item.price * item.quantity | number: '1.2-2' }}
+          </td>
 
           <td class="p-4">
-            <button
-              class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
-              (click)="cartService.decrease(item.id)"
-            >
-              -
-            </button>
+            <div class="flex gap-2">
+              <button
+                class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
+                (click)="cartService.decrease(item.id)"
+              >
+                -
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -49,12 +60,12 @@
   <div class="mt-8 bg-white shadow-md rounded-xl p-6 w-full max-w-md">
     <div class="flex justify-between mb-2 text-gray-700">
       <span>Total:</span>
-      <span class="font-semibold">${{ cartService.getTotal() }}</span>
+      <span class="font-semibold">KES {{ cartService.getTotal() | number: '1.2-2' }}</span>
     </div>
 
     <div class="flex justify-between mb-2 text-gray-700">
       <span>Wallet:</span>
-      <span class="font-semibold">${{ cartService.getWalletBalance() }}</span>
+      <span class="font-semibold">KES {{ cartService.getWalletBalance() | number: '1.2-2' }}</span>
     </div>
 
     <div class="flex justify-between mb-4 text-lg">
@@ -66,7 +77,7 @@
           'text-red-600': cartService.getRemainingBalance() < 0,
         }"
       >
-        ${{ cartService.getRemainingBalance() }}
+        KES {{ cartService.getRemainingBalance() | number: '1.2-2' }}
       </span>
     </div>
 

@@ -31,4 +31,18 @@ export class CartComponent {
     this.cartService.clearCart();
     this.router.navigate(['/products']);
   }
+
+  onQuantityChange(productId: number, event: any) {
+    const val = parseInt(event.target.value, 10);
+    this.cartService.updateQuantity(productId, isNaN(val) ? 0 : val);
+  }
+
+  onlyNumbers(event: any) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
 }
